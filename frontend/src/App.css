@@ -3,7 +3,7 @@
     /* <-- fonts */
 }
 
-.App {
+.auth-page {
     display: flex;
     text-align: center;
     min-height: 100vh;
@@ -66,3 +66,4 @@ input {
 .link-btn:hover {
     color: #614d87;
 }
+
