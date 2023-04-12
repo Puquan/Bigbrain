@@ -35,7 +35,7 @@ function Register (props) {
 
   return (
     <>
-      <div>
+      <div className='auth-div'>
         <form className="register-form" onSubmit={handleSubmit}>
           <label htmlFor='username'>Username: </label>
           <input value={username} onChange={(e) => setUsername(e.target.value)} type='text' name='username' id='username' />
