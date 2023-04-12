@@ -1,0 +1,66 @@
+* {
+    font: Verdana, Arial, 'sans-serif' !important;
+    /* <-- fonts */
+}
+
+.App {
+    display: flex;
+    text-align: center;
+    min-height: 100vh;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    background-image: linear-gradient(79deg, #8654def6, #92608d 48%, #F7944D);
+}
+
+.auth-div,.login-form,.register-form {
+    display: flex;
+    flex-direction: column;
+}
+
+@media screen and (min-width: 600px) {
+    .auth-div {
+        padding: 5rem;
+        border: 1px solid white;
+        border-radius: 10px;
+        margin: 0.5rem;
+    }
+}
+
+label {
+    text-align: left;
+    padding: 0.25rem 0;
+}
+
+input {
+    margin: 0.5rem 0;
+    padding: 1rem;
+    border: none;
+    border-radius: 10px;
+}
+
+.auth-button {
+    border: none;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    color: #7439db;
+}
+
+.auth-button:hover {
+    background-color: #7439db;
+    color: white;
+}
+
+
+.link-btn {
+    margin-top: 1rem;
+    background: none;
+    color: white;
+    text-decoration: underline;
+}
+
+.link-btn:hover {
+    color: #614d87;
+}
