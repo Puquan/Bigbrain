@@ -2,11 +2,15 @@ import React from 'react'
 
 interface AlertProps {
   children: React.ReactNode;
+  onClose?: () => void;
 }
 
-const Alert = ({ children }: AlertProps) => {
+const Alert = ({ children, onClose }: AlertProps) => {
   return (
-    <div className='alert alert-primary'>{children}</div>
+    <div className='alert alert-danger alert-dismissible fade show'>
+      {children}
+      <button type="button" className="btn-close" onClick={onClose} data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
   )
 }
 
