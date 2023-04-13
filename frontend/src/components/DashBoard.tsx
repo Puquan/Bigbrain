@@ -1,12 +1,18 @@
 import React from 'react';
 import Navbar from './Navbar';
+import QuizList from './QuizList';
 
 interface Props {
     token: null | string;
 }
 
 function DashBoard ({ token }: Props) {
-  const [quizzes, setQuizzes] = React.useState([]);
+  const [quizzes, setQuizzes] = React.useState<any[]>([]);
+  const [quizName, setQuizName] = React.useState<any []>([]);
+  const [alertVisible, setAlertVisible] = React.useState(false);
+  const [errorMessages, setErrorMessages] = React.useState<string[]>([]);
+  const [newGameShow, setNewGameShow] = React.useState(false);
+  const items = ['An item', 'An item', 'A third item', 'A fourth item', 'And a fifth one']
 
   async function fetchAllQuizzes () {
     const response = await fetch('http://localhost:5005/admin/quiz', {
@@ -20,10 +26,20 @@ function DashBoard ({ token }: Props) {
     setQuizzes(data.quizzes);
   }
 
-  const handleTestclick = () => {
-    console.log('test')
+  React.useEffect(() => {
     fetchAllQuizzes();
-    console.log(quizzes)
+  }, []);
+
+  React.useEffect(() => {
+    if (quizzes.length !== 0) {
+      for (let i = 0; i < quizzes.length; i++) {
+        setQuizName(quizName => [...quizName, quizzes[i].name]);
+      }
+    }
+  }, [quizzes]);
+
+  const handleTestclick = () => {
+    setNewGameShow(!newGameShow);
   }
 
   return (
@@ -33,6 +49,11 @@ function DashBoard ({ token }: Props) {
         <h1>Dashboard</h1>
       </div>
       <button className='test' onClick={handleTestclick}> Test </button>
+      {newGameShow && (
+        <>
+        <QuizList items={quizName} heading='Quiz'/>
+        </>
+      )}
     </>
   );
 }
