@@ -5,24 +5,25 @@ import Alert from './components/Alert';
 import DashBoard from './components/DashBoard';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
+import ListGroup from './components/ListGroup';
+import Book from './components/Book';
+import About from './components/About';
 import {
-  BrowserRouter as Router,
+  useNavigate,
+  Routes,
   Route,
   Link,
   useParams
 } from 'react-router-dom';
 
 function App () {
-  const [currentForm, setCurrentForm] = React.useState('login');
   const [token, setToken] = React.useState<null | string>(null);
-
-  const toggleForm = (formName: string) => {
-    setCurrentForm(formName);
-  }
+  const navigate = useNavigate();
 
   function manageTokenSet (token: string) {
     setToken(token);
     localStorage.setItem('token', token);
+    navigate('/dashboard');
   }
 
   React.useEffect(function () {
@@ -33,23 +34,15 @@ function App () {
     }
   }, [token]);
 
-  if (token === null) {
-    return (
-      <>
-        <Router>
-          <div className='auth-page'>
-            {
-              currentForm === 'login' ? <Link to='/login' style={{ textDecoration: 'none', color: 'white' }}><Login onFormSwitch={toggleForm} onSubmit={manageTokenSet} /></Link> : <Link to='/register' style={{ textDecoration: 'none', color: 'white' }}><Register onFormSwitch={toggleForm} onSubmit={manageTokenSet}/></Link>
-            }
-          </div>
-        </Router>
-      </>
-    );
-  } else {
-    return (
-      <DashBoard token={token} />
-    );
-  }
+  return (
+    <>
+    <Routes>
+      <Route path='/' element={<Login onSubmit={manageTokenSet} />} />
+      <Route path='/register' element={<Register onSubmit={manageTokenSet} /> } />
+      <Route path='/dashboard' element={<DashBoard token={token} />} />
+    </Routes>
+    </>
+  );
 }
 
 export default App;
