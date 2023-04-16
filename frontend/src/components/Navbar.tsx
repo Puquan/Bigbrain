@@ -9,10 +9,14 @@ function Navbar () {
     navigate('/');
   };
 
+  const handleClickTile = () => {
+    navigate('/dashboard');
+  };
+
   return (
     <>
       <nav className='navbar'>
-        <a className='bigbrain-titile'>
+        <a className='bigbrain-titile' onClick={handleClickTile}>
             Big Brain
         </a>
       <ul>

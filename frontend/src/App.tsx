@@ -5,9 +5,6 @@ import Alert from './components/Alert';
 import DashBoard from './components/DashBoard';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
-import ListGroup from './components/ListGroup';
-import Book from './components/Book';
-import About from './components/About';
 import {
   useNavigate,
   Routes,
@@ -15,6 +12,9 @@ import {
   Link,
   useParams
 } from 'react-router-dom';
+import { Edit } from '@mui/icons-material';
+import EditGame from './components/EditGame';
+import QuestionForm from './components/QuestionForm';
 
 function App () {
   const [token, setToken] = React.useState<null | string>(null);
@@ -34,12 +34,18 @@ function App () {
     }
   }, [token]);
 
+  const onSaveGame = () => {
+    navigate('/dashboard');
+  }
+
   return (
     <>
     <Routes>
       <Route path='/' element={<Login onSubmit={manageTokenSet} />} />
       <Route path='/register' element={<Register onSubmit={manageTokenSet} /> } />
-      <Route path='/dashboard' element={<DashBoard token={token} />} />
+        {token && <Route path='/dashboard/*' element={<DashBoard token={token} />} />}
+      <Route path='/editGame/:id' element={<EditGame/>}/>
+      <Route path='/questionForm/:quizId/:questionId' element={<QuestionForm/>} />
     </Routes>
     </>
   );

@@ -3,8 +3,9 @@
  object that doesn't contain any important meta data (e.g. the answer)
  to return to a "player"
 */
+
+
 export const quizQuestionPublicReturn = question => {
-  console.log('See question: ', question);
   return question;
 };
 

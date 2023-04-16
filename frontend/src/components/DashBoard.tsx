@@ -1,6 +1,17 @@
 import React from 'react';
 import Navbar from './Navbar';
 import QuizList from './QuizList';
+import Button from '@mui/material/Button';
+import { TextField } from '@mui/material';
+import SendIcon from '@mui/icons-material/Send';
+import Alert from './Alert';
+import {
+  useNavigate,
+  Routes,
+  Route,
+  Link,
+  useParams
+} from 'react-router-dom';
 
 interface Props {
     token: null | string;
@@ -8,11 +19,17 @@ interface Props {
 
 function DashBoard ({ token }: Props) {
   const [quizzes, setQuizzes] = React.useState<any[]>([]);
-  const [quizName, setQuizName] = React.useState<any []>([]);
+  const [first, setFirst] = React.useState(true);
   const [alertVisible, setAlertVisible] = React.useState(false);
   const [errorMessages, setErrorMessages] = React.useState<string[]>([]);
+  const [createWindowVisible, setCreateWindowVisible] = React.useState(false);
   const [newGameShow, setNewGameShow] = React.useState(false);
-  const items = ['An item', 'An item', 'A third item', 'A fourth item', 'And a fifth one']
+  const [quizNameInput, setQuizNameInput] = React.useState('');
+  const navigate = useNavigate();
+
+  React.useEffect(() => {
+    fetchAllQuizzes();
+  }, [newGameShow]);
 
   async function fetchAllQuizzes () {
     const response = await fetch('http://localhost:5005/admin/quiz', {
@@ -24,36 +41,76 @@ function DashBoard ({ token }: Props) {
     })
     const data = await response.json();
     setQuizzes(data.quizzes);
+    setFirst(false);
   }
 
-  React.useEffect(() => {
-    fetchAllQuizzes();
-  }, []);
-
-  React.useEffect(() => {
-    if (quizzes.length !== 0) {
-      for (let i = 0; i < quizzes.length; i++) {
-        setQuizName(quizName => [...quizName, quizzes[i].name]);
-      }
+  async function CreateQuiz (quizName: string) {
+    const response = await fetch('http://localhost:5005/admin/quiz/new', {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        name: quizName,
+      }),
+    })
+    const data = await response.json();
+    if (data.error) {
+      setAlertVisible(true);
+      setErrorMessages(data.error);
+      return;
     }
-  }, [quizzes]);
+    fetchAllQuizzes();
+    setNewGameShow(true);
+  }
 
   const handleTestclick = () => {
-    setNewGameShow(!newGameShow);
+    navigate('/edit');
+  }
+
+  const handleTextFieldChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setQuizNameInput(event.target.value);
+  }
+
+  const handleSendClick = () => {
+    console.log(quizNameInput);
+    if (!quizNameInput) {
+      setAlertVisible(true);
+      setErrorMessages(['Please enter the game name']);
+      setCreateWindowVisible(false);
+      return;
+    }
+    CreateQuiz(quizNameInput);
+    setCreateWindowVisible(false);
+    setQuizNameInput('');
+  }
+
+  const handleCreateGameClick = () => {
+    setCreateWindowVisible(!createWindowVisible);
   }
 
   return (
     <>
+    <div className='errorWindow'> {alertVisible && <Alert onClose={() => setAlertVisible(false)}>{errorMessages}</Alert>} </div>
     <Navbar/>
       <div className='dashboard'>
-        <h1>Dashboard</h1>
+        <Button variant="contained" data-testid="create-new-quiz" onClick={handleCreateGameClick}>Create Quiz</Button>
+        { createWindowVisible && <div className="createWindow">
+          <TextField
+            helperText="Please enter the game name"
+            id="demo-helper-text-aligned"
+            label="Game"
+            onChange={handleTextFieldChange}>
+          </TextField>
+          <Button onClick={handleSendClick} variant="contained" endIcon={<SendIcon />} id='send-quizName'>
+            Send
+          </Button>
+        </div>
+        }
       </div>
       <button className='test' onClick={handleTestclick}> Test </button>
-      {newGameShow && (
-        <>
-        <QuizList items={quizName} heading='Quiz'/>
-        </>
-      )}
+    {!first && <QuizList items={quizzes} heading='Your Quiz List'/>}
     </>
   );
 }

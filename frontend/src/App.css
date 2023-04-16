@@ -17,6 +17,14 @@
     background-image: linear-gradient(79deg, #8654def6, #92608d 48%, #F7944D);
 }
 
+.button-group {
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+}
+
 .auth-div,.login-form,.register-form {
     display: flex;
     flex-direction: column;
@@ -104,6 +112,11 @@ input {
     padding: .25rem;
 }
 
+.navbar a:hover{
+    background-color: #555;
+    cursor: pointer;
+}
+
 .navbar li.active {
     background-color: #555;
 }
@@ -122,4 +135,24 @@ input {
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: #f8d7da;
+    z-index: 100;
+}
+
+.createWindow{
+    position: absolute;
+    display: flex;
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-image: linear-gradient(79deg, #a98bdef6, #dea9d8 48%, #F7944D);
+    background-color: #39c78e;
+    align-items: baseline;
+    z-index: 99;
+}
+
+.EditGameBox{
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    align-items: baseline;
 }
