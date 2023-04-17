@@ -22,12 +22,12 @@ interface AnswerOption {
 }
 
 interface Question {
-  id: string;
-  name: string;
-  isMultipleChoice: boolean;
-  answers: AnswerOption[];
-  timeLimit: number;
-  points: number;
+  questionId: number;
+  questionType: string;
+  question: string;
+  timeLimit: string;
+  points: string;
+  url: string;
 }
 
 interface Game {
@@ -58,10 +58,12 @@ function EditGame () {
   const [errorMessages, setErrorMessages] = React.useState<string[]>([]);
   const [alertVisible, setAlertVisible] = React.useState(false);
   const [editQuiz, setEditQuiz] = React.useState(false);
+  const [showQuestionList, setShowQuestionList] = React.useState(false);
 
   React.useEffect(() => {
     setId(param.id);
-  }, [param.id]);
+    fetchQuizbyId(id);
+  }, []);
 
   async function fetchQuizbyId (id: string | number) {
     const response = await fetch(`http://localhost:5005/admin/quiz/${id}`, {
@@ -79,6 +81,7 @@ function EditGame () {
     }
     setQuiz(data);
     setFirst(false);
+    setShowQuestionList(true);
   }
 
   const handleDeleteClick = (quizId: undefined | string) => {
@@ -122,7 +125,7 @@ function EditGame () {
     setGame((prev) => ({ ...prev, oldSessions: quiz.oldSessions }));
   }, [first, quiz, id]);
 
-  console.log(game);
+  console.log(game.questions);
 
   const handleSubmit = (editQuiz: boolean) => {
     setEditQuiz(!editQuiz);
@@ -137,7 +140,7 @@ function EditGame () {
         <Button color='error' startIcon={<DeleteIcon />} onClick={() => handleDeleteClick(param.id)} >Delete Quiz</Button>
       </ButtonGroup>
       <div className='errorWindow'> {alertVisible && <Alert onClose={() => setAlertVisible(false)}>{errorMessages}</Alert>} </div>
-      <QuestionList game={game}/>
+      {showQuestionList && <QuestionList game={quiz} quizId={id} />}
       {editQuiz && <EditBox quizId={id} onSubmit={() => handleSubmit(editQuiz)}/>}
     </>
   );

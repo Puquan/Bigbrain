@@ -17,14 +17,26 @@ interface Props {
     token: null | string;
 }
 
+interface data {
+  id: number;
+  createdAt: string;
+  name: string;
+  thumbnail: string;
+  owner: string;
+  active: boolean | null;
+  oldSessions: any[];
+  questions: any[];
+}
+
 function DashBoard ({ token }: Props) {
-  const [quizzes, setQuizzes] = React.useState<any[]>([]);
+  const [quizzes, setQuizzes] = React.useState<data[]>([]);
   const [first, setFirst] = React.useState(true);
   const [alertVisible, setAlertVisible] = React.useState(false);
   const [errorMessages, setErrorMessages] = React.useState<string[]>([]);
   const [createWindowVisible, setCreateWindowVisible] = React.useState(false);
   const [newGameShow, setNewGameShow] = React.useState(false);
   const [quizNameInput, setQuizNameInput] = React.useState('');
+  const [session, setSession] = React.useState<any>([]);
   const navigate = useNavigate();
 
   React.useEffect(() => {
@@ -41,6 +53,7 @@ function DashBoard ({ token }: Props) {
     })
     const data = await response.json();
     setQuizzes(data.quizzes);
+    setSession(data);
     setFirst(false);
   }
 
@@ -66,7 +79,7 @@ function DashBoard ({ token }: Props) {
   }
 
   const handleTestclick = () => {
-    navigate('/edit');
+    console.log(session);
   }
 
   const handleTextFieldChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

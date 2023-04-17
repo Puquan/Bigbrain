@@ -13,9 +13,10 @@ import {
 import Checkbox from '@mui/material/Checkbox';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
-import { Button, IconButton } from '@mui/material';
-import { useParams } from 'react-router-dom';
+import { Button, FormControlLabel, IconButton, Radio, RadioGroup } from '@mui/material';
+import { useNavigate, useParams } from 'react-router-dom';
 import Alert from './Alert';
+import { PhotoCamera } from '@mui/icons-material';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -61,17 +62,36 @@ const initialAnswerOptions: AnswerOption[] = [
 const QuestionForm: React.FC = () => {
   const classes = useStyles();
   const param = useParams();
-  const [questionType, setQuestionType] = useState('');
-  const [question, setQuestion] = useState('');
-  const [timeLimit, setTimeLimit] = useState('');
-  const [points, setPoints] = useState('');
-  const [url, setUrl] = useState('');
-  const [answerOptions, setAnswerOptions] = useState<AnswerOption[]>(initialAnswerOptions);
+  const navigate = useNavigate();
+  const [questionId, setQuestionId] = React.useState<number>(Date.now());
+  const [questionType, setQuestionType] = React.useState('single-choice');
+  const [question, setQuestion] = React.useState('');
+  const [timeLimit, setTimeLimit] = React.useState<string>('');
+  const [points, setPoints] = React.useState<string>('');
+  const [url, setUrl] = React.useState('');
+  const [answerOptions, setAnswerOptions] = React.useState<AnswerOption[]>(initialAnswerOptions);
   const [isAddButtonDisabled, setIsAddButtonDisabled] = useState(false);
   const [isRemoveButtonDisabled, setIsRemoveButtonDisabled] = useState(true);
   const [errorMessages, setErrorMessages] = React.useState<string[]>([]);
   const [alertVisible, setAlertVisible] = React.useState(false);
   const [QuestionfromDB, setQuestionfromDB] = React.useState<any>([]);
+  const [image, setImage] = React.useState('');
+  const [imageName, setImageName] = React.useState('');
+  const [IsAnswerCompleted, setIsAnswerCompleted] = React.useState(false);
+  const [IsRequireCompleted, setIsRequireCompleted] = React.useState(false);
+
+  const handleRequireValidation = () => {
+    let isComplete = true;
+    const requiredFields = [question, timeLimit, points];
+
+    requiredFields.forEach(field => {
+      if (!field) {
+        isComplete = false;
+      }
+    });
+
+    setIsRequireCompleted(isComplete);
+  }
 
   async function fetchQuizbyId (id: string | number) {
     const response = await fetch(`http://localhost:5005/admin/quiz/${id}`, {
@@ -92,8 +112,18 @@ const QuestionForm: React.FC = () => {
   React.useEffect(() => {
     if (param.quizId) {
       fetchQuizbyId(param.quizId);
+      const newQuestions = {
+        questionId,
+        questionType,
+        question,
+        timeLimit,
+        points,
+        url,
+        answerOptions,
+        image,
+      };
+      setQuestionfromDB((prevQuestions: any) => [...prevQuestions, newQuestions]);
     }
-    console.log(QuestionfromDB);
   }, []);
 
   React.useEffect(() => {
@@ -134,15 +164,20 @@ const QuestionForm: React.FC = () => {
     );
   };
 
-  async function updateQuestion () {
-    setQuestionfromDB((prevState: any) => [...prevState, {
-      questionType: questionType,
-      question: question,
-      timeLimit: timeLimit,
-      points: points,
-      url: url,
-      answerOptions: answerOptions
-    }]);
+  async function createQuestion () {
+    const newQuestions = {
+      questionId,
+      questionType,
+      question,
+      timeLimit,
+      points,
+      url,
+      answerOptions,
+      image,
+    };
+
+    setQuestionfromDB((prevQuestions: any) => [...prevQuestions, newQuestions]);
+
     const response = await fetch(`http://localhost:5005/admin/quiz/${param.quizId}`, {
       method: 'PUT',
       headers: {
@@ -150,7 +185,7 @@ const QuestionForm: React.FC = () => {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
       },
       body: JSON.stringify({
-        question: QuestionfromDB,
+        questions: QuestionfromDB,
       }),
     })
     const data = await response.json();
@@ -171,7 +206,39 @@ const QuestionForm: React.FC = () => {
         return;
       }
     }
-    updateQuestion();
+    if (questionType === 'multiple-choice') {
+      const isCorrectAnswerSelected = answerOptions.some(
+        option => option.isCorrect
+      );
+      if (!isCorrectAnswerSelected) {
+        setAlertVisible(true);
+        setErrorMessages(['Please select at least one correct answer']);
+        return;
+      }
+    }
+    if (IsRequireCompleted === false || IsAnswerCompleted === false) {
+      setAlertVisible(true);
+      setErrorMessages(['Please fill all required fields']);
+      return;
+    }
+    createQuestion();
+  }
+
+  function handleImageChange (event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+      setImageName(file.name);
+    }
+  }
+
+  const handleValidation = () => {
+    const isComplete = answerOptions.every(option => option.value !== '');
+    setIsAnswerCompleted(isComplete);
   }
 
   return (
@@ -181,17 +248,16 @@ const QuestionForm: React.FC = () => {
     <Box className={classes.root}>
       <Typography variant="h6">Create a Question</Typography>
       <FormControl className={classes.formControl}>
-        <InputLabel id="question-type-select-label" required shrink variant='outlined'>Question Type</InputLabel>
-          <Select
-            labelId="question-type-select-label"
-            variant="outlined"
-            id="question-type-select"
+          <RadioGroup
+            aria-label="question-type"
+            defaultValue="single-choice"
+            name="question-type"
             value={questionType}
-            onChange={event => setQuestionType(event.target.value as string)}
+            onChange={event => setQuestionType(event.target.value)}
           >
-          <MenuItem value="single-choice">Single Choice</MenuItem>
-          <MenuItem value="multiple-choice">Multiple Choice</MenuItem>
-          </Select>
+            <FormControlLabel value="single-choice" control={<Radio />} label="Single Choice" />
+            <FormControlLabel value="multiple-choice" control={<Radio />} label="Multiple Choice" />
+          </RadioGroup>
           </FormControl>
             <TextField
                 required
@@ -201,6 +267,7 @@ const QuestionForm: React.FC = () => {
                 label="Question"
                 value={question}
                 onChange={event => setQuestion(event.target.value)}
+                onBlur={handleRequireValidation}
             />
             <TextField
                 required
@@ -212,6 +279,7 @@ const QuestionForm: React.FC = () => {
                 type="number"
                 InputProps={{ inputProps: { min: 0 } }}
                 onChange={event => setTimeLimit(event.target.value)}
+                onBlur={handleRequireValidation}
             />
             <TextField
                 required
@@ -223,6 +291,7 @@ const QuestionForm: React.FC = () => {
                 type="number"
                 InputProps={{ inputProps: { min: 0 } }}
                 onChange={event => setPoints(event.target.value)}
+                onBlur={handleRequireValidation}
             />
             <TextField
                 variant="outlined"
@@ -232,15 +301,24 @@ const QuestionForm: React.FC = () => {
                 value={url}
                 onChange={event => setUrl(event.target.value)}
             />
+            <IconButton color="primary" aria-label="upload picture" component="label">
+              <input hidden accept="image/*" type="file" onChange={handleImageChange} />
+              <PhotoCamera />
+            </IconButton>
+            <br />
+            {image && <img width='100' src={image} alt="image" />}
+            {imageName && <Typography variant="body2">{imageName}</Typography> && <br/>}
             {answerOptions.map(option => (
               <div key={option.id}>
                 <TextField
+                    required
                     variant="outlined"
                     className={classes.element}
                     key={option.id}
                     label={`Answer Option ${option.id}`}
                     value={option.value}
                     onChange={event => handleAnswerOptionChange(option.id, event.target.value)}
+                    onBlur={handleValidation}
                 />
                 <br />
                 <Typography>Correct Answer?<Checkbox checked={option.isCorrect} onClick={() => handleAnswerOptionChangeCheckbox(option.id)}/></Typography>
