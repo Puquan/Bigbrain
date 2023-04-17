@@ -86,8 +86,9 @@ function QuestionList ({ game, quizId }: Props) {
     setGameQuestions(game.questions);
   }, [game]);
 
-  const handleEditClick = () => {
+  const handleEditClick = (questionId: string | number) => {
     console.log('go to edit page');
+    navigate(`/questionForm/${quizId}/${questionId}/edit`)
   };
 
   const handleDeleteClick = (questionId: string | number) => {
@@ -118,7 +119,7 @@ function QuestionList ({ game, quizId }: Props) {
             return (
               <div key={question.questionId}>
                 <Typography>{'Question' + (index + 1)}: {question.question}</Typography>
-                <IconButton title="Edit the Quiz" className={style.icon} onClick={() => handleEditClick()}>
+                <IconButton title="Edit the Quiz" className={style.icon} onClick={() => handleEditClick(question.questionId)}>
                   <EditIcon />
                 </IconButton>
                 <IconButton title="Delete the Quiz" className={style.icon} onClick={() => handleDeleteClick(question.questionId)}>

@@ -1,12 +1,11 @@
 import React from 'react';
 import Login from './components/Login'
 import Register from './components/Register';
-import Alert from './components/Alert';
 import DashBoard from './components/DashBoard';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import QuizResult from './components/QuizResult';
-
+import QuestionFormEdit from './components/QuestionFormEdit';
 import {
   useNavigate,
   Routes,
@@ -14,7 +13,6 @@ import {
   Link,
   useParams
 } from 'react-router-dom';
-import { Edit } from '@mui/icons-material';
 import EditGame from './components/EditGame';
 import QuestionForm from './components/QuestionForm';
 
@@ -49,6 +47,7 @@ function App () {
       <Route path='/editGame/:id' element={<EditGame />}/>
       <Route path='/questionForm/:quizId/:questionId/create' element={<QuestionForm />} />
       <Route path='/quizResult/:quizId/:sessionId' element={<QuizResult />} />
+      <Route path='/questionForm/:quizId/:questionId/edit' element={<QuestionFormEdit />} />
     </Routes>
     </>
   );
