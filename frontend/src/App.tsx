@@ -5,6 +5,8 @@ import Alert from './components/Alert';
 import DashBoard from './components/DashBoard';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
+import QuizResult from './components/QuizResult';
+
 import {
   useNavigate,
   Routes,
@@ -44,8 +46,9 @@ function App () {
       <Route path='/' element={<Login onSubmit={manageTokenSet} />} />
       <Route path='/register' element={<Register onSubmit={manageTokenSet} /> } />
         {token && <Route path='/dashboard/*' element={<DashBoard token={token} />} />}
-      <Route path='/editGame/:id' element={<EditGame/>}/>
-      <Route path='/questionForm/:quizId/:questionId' element={<QuestionForm/>} />
+      <Route path='/editGame/:id' element={<EditGame />}/>
+      <Route path='/questionForm/:quizId/:questionId/create' element={<QuestionForm />} />
+      <Route path='/quizResult/:quizId/:sessionId' element={<QuizResult />} />
     </Routes>
     </>
   );

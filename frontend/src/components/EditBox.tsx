@@ -52,12 +52,12 @@ function EditBox ({ quizId, onSubmit }: Props) {
 
   return (
       <div className="EditGameBox">
-          <Typography variant="h6">Edit Quiz</Typography>
+          <Typography variant="h6">Edit Game</Typography>
           <form onSubmit={handleSubmit} >
               <TextField
                   style={{ width: '10em', margin: '1em' }}
                   type="text"
-                  label="Quiz Name"
+                  label="Game Name"
                   variant="outlined"
                   value={quizName}
                   onChange={(event) => setQuizName(event.target.value)}

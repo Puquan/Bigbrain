@@ -7,10 +7,6 @@ import SendIcon from '@mui/icons-material/Send';
 import Alert from './Alert';
 import {
   useNavigate,
-  Routes,
-  Route,
-  Link,
-  useParams
 } from 'react-router-dom';
 
 interface Props {
@@ -108,7 +104,7 @@ function DashBoard ({ token }: Props) {
     <div className='errorWindow'> {alertVisible && <Alert onClose={() => setAlertVisible(false)}>{errorMessages}</Alert>} </div>
     <Navbar/>
       <div className='dashboard'>
-        <Button variant="contained" data-testid="create-new-quiz" onClick={handleCreateGameClick}>Create Quiz</Button>
+        <Button variant="contained" data-testid="create-new-quiz" onClick={handleCreateGameClick}>Create A New Game</Button>
         { createWindowVisible && <div className="createWindow">
           <TextField
             helperText="Please enter the game name"
@@ -123,7 +119,7 @@ function DashBoard ({ token }: Props) {
         }
       </div>
       <button className='test' onClick={handleTestclick}> Test </button>
-    {!first && <QuizList items={quizzes} heading='Your Quiz List'/>}
+    {!first && <QuizList items={quizzes} heading='Your Game List'/>}
     </>
   );
 }

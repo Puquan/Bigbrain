@@ -63,7 +63,7 @@ function EditGame () {
   React.useEffect(() => {
     setId(param.id);
     fetchQuizbyId(id);
-  }, []);
+  }, [showQuestionList]);
 
   async function fetchQuizbyId (id: string | number) {
     const response = await fetch(`http://localhost:5005/admin/quiz/${id}`, {
@@ -90,7 +90,7 @@ function EditGame () {
   };
 
   const handleAddQuestionClick = (quizId: undefined | string, questionId: undefined | number) => {
-    navigate(`/questionForm/${quizId}/${questionId}`);
+    navigate(`/questionForm/${quizId}/${questionId}/create`);
   };
 
   const handleEditQuizClick = () => {
@@ -125,8 +125,6 @@ function EditGame () {
     setGame((prev) => ({ ...prev, oldSessions: quiz.oldSessions }));
   }, [first, quiz, id]);
 
-  console.log(game.questions);
-
   const handleSubmit = (editQuiz: boolean) => {
     setEditQuiz(!editQuiz);
   }
@@ -136,7 +134,7 @@ function EditGame () {
       <Navbar />
       <ButtonGroup variant="contained" aria-label="outlined primary button group" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <Button color='success' startIcon={<AddIcon />} onClick={() => handleAddQuestionClick(param.id, game.questions.length)} >Add Question</Button>
-        <Button startIcon={<EditIcon />} onClick={handleEditQuizClick} >Edit Quiz</Button>
+        <Button startIcon={<EditIcon />} onClick={handleEditQuizClick} >Edit GAME Profile</Button>
         <Button color='error' startIcon={<DeleteIcon />} onClick={() => handleDeleteClick(param.id)} >Delete Quiz</Button>
       </ButtonGroup>
       <div className='errorWindow'> {alertVisible && <Alert onClose={() => setAlertVisible(false)}>{errorMessages}</Alert>} </div>

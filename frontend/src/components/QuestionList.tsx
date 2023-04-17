@@ -57,12 +57,12 @@ function QuestionList ({ game, quizId }: Props) {
   const [gameThumbnail, setGameThumbnail] = React.useState(game.thumbnail);
   const [gameQuestions, setGameQuestions] = React.useState(game.questions);
   const [alertVisible, setAlertVisible] = React.useState(false);
-  const [QuestionfromDB, setQuestionfromDB] = React.useState<Question[]>([]);
   const navigate = useNavigate();
   const param = useParams();
   const style = useStyles();
 
   async function DeleteQuestion () {
+    console.log(gameQuestions)
     const response = await fetch(`http://localhost:5005/admin/quiz/${quizId}`, {
       method: 'PUT',
       headers: {
@@ -91,14 +91,19 @@ function QuestionList ({ game, quizId }: Props) {
   };
 
   const handleDeleteClick = (questionId: string | number) => {
+    console.log(questionId);
     setGameQuestions(gameQuestions.filter((question) => question.questionId !== questionId));
-    DeleteQuestion();
   };
 
-  console.log(game);
+  React.useEffect(() => {
+    if (gameQuestions) {
+      DeleteQuestion();
+    }
+  }, [gameQuestions]);
 
   return (
     <>
+      <div className='errorWindow'> {alertVisible && <Alert onClose={() => setAlertVisible(false)}>{ErrorMessages}</Alert>} </div>
       <Card>
         <CardHeader
           title= {gameName} />
@@ -112,7 +117,7 @@ function QuestionList ({ game, quizId }: Props) {
           {gameQuestions && gameQuestions.map((question: any, index) => {
             return (
               <div key={question.questionId}>
-                <Typography>{index + 1}: {question.question}</Typography>
+                <Typography>{'Question' + (index + 1)}: {question.question}</Typography>
                 <IconButton title="Edit the Quiz" className={style.icon} onClick={() => handleEditClick()}>
                   <EditIcon />
                 </IconButton>

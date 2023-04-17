@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 function Navbar () {
   const navigate = useNavigate();
@@ -20,9 +20,6 @@ function Navbar () {
             Big Brain
         </a>
       <ul>
-        <li>
-            <a>Create Quiz</a>
-        </li>
         <li>
             <a onClick={handleLogout}>Logout</a>
         </li>

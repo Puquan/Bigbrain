@@ -4,9 +4,6 @@ import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import {
   Box,
   FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
   TextField,
   Typography,
 } from '@material-ui/core';
@@ -14,7 +11,7 @@ import Checkbox from '@mui/material/Checkbox';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { Button, FormControlLabel, IconButton, Radio, RadioGroup } from '@mui/material';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import Alert from './Alert';
 import { PhotoCamera } from '@mui/icons-material';
 
@@ -46,12 +43,14 @@ interface AnswerOption {
 }
 
 interface Question {
-  id: string;
-  name: string;
-  isMultipleChoice: boolean;
-  answers: AnswerOption[];
-  timeLimit: number;
-  points: number;
+  questionId: number;
+  questionType: string;
+  question: string;
+  timeLimit: string;
+  points: string;
+  url: string;
+  answerOptions: AnswerOption[];
+  image: string;
 }
 
 const initialAnswerOptions: AnswerOption[] = [
@@ -59,7 +58,18 @@ const initialAnswerOptions: AnswerOption[] = [
   { id: 2, value: '', isCorrect: false },
 ];
 
-const QuestionForm: React.FC = () => {
+const initialQuestion: Question = {
+  questionId: 0,
+  questionType: '',
+  question: '',
+  timeLimit: '',
+  points: '',
+  url: '',
+  answerOptions: [],
+  image: '',
+};
+
+function QuestionForm () {
   const classes = useStyles();
   const param = useParams();
   const navigate = useNavigate();
@@ -74,11 +84,37 @@ const QuestionForm: React.FC = () => {
   const [isRemoveButtonDisabled, setIsRemoveButtonDisabled] = useState(true);
   const [errorMessages, setErrorMessages] = React.useState<string[]>([]);
   const [alertVisible, setAlertVisible] = React.useState(false);
-  const [QuestionfromDB, setQuestionfromDB] = React.useState<any>([]);
+  const [QuestionfromDB, setQuestionfromDB] = React.useState<any>(null);
   const [image, setImage] = React.useState('');
   const [imageName, setImageName] = React.useState('');
   const [IsAnswerCompleted, setIsAnswerCompleted] = React.useState(false);
   const [IsRequireCompleted, setIsRequireCompleted] = React.useState(false);
+  const [newQuestion, setNewQuestion] = React.useState<Question>(initialQuestion);
+  const [first, setFirst] = React.useState(true);
+
+  React.useEffect(() => {
+    if (param.quizId) {
+      fetchQuizbyId(param.quizId);
+      setNewQuestion({ questionId, questionType, question, timeLimit, points, url, answerOptions, image });
+    }
+  }, []);
+
+  React.useEffect(() => {
+    setNewQuestion({ questionId, questionType, question, timeLimit, points, url, answerOptions, image });
+  }, [questionId, questionType, question, timeLimit, points, url, answerOptions, image, imageName, IsAnswerCompleted, IsRequireCompleted]);
+
+  React.useEffect(() => {
+    if (QuestionfromDB) {
+      if (first) {
+        setQuestionfromDB((prevState: any) => [...prevState, newQuestion]);
+        setFirst(false);
+      } else {
+        const updatedQuestions = [...QuestionfromDB];
+        updatedQuestions[updatedQuestions.length - 1] = newQuestion;
+        setQuestionfromDB(updatedQuestions);
+      }
+    }
+  }, [newQuestion]);
 
   const handleRequireValidation = () => {
     let isComplete = true;
@@ -89,9 +125,8 @@ const QuestionForm: React.FC = () => {
         isComplete = false;
       }
     });
-
     setIsRequireCompleted(isComplete);
-  }
+  };
 
   async function fetchQuizbyId (id: string | number) {
     const response = await fetch(`http://localhost:5005/admin/quiz/${id}`, {
@@ -108,23 +143,6 @@ const QuestionForm: React.FC = () => {
       setErrorMessages(data.error);
     }
   }
-
-  React.useEffect(() => {
-    if (param.quizId) {
-      fetchQuizbyId(param.quizId);
-      const newQuestions = {
-        questionId,
-        questionType,
-        question,
-        timeLimit,
-        points,
-        url,
-        answerOptions,
-        image,
-      };
-      setQuestionfromDB((prevQuestions: any) => [...prevQuestions, newQuestions]);
-    }
-  }, []);
 
   React.useEffect(() => {
     if (answerOptions.length === 6) {
@@ -165,19 +183,6 @@ const QuestionForm: React.FC = () => {
   };
 
   async function createQuestion () {
-    const newQuestions = {
-      questionId,
-      questionType,
-      question,
-      timeLimit,
-      points,
-      url,
-      answerOptions,
-      image,
-    };
-
-    setQuestionfromDB((prevQuestions: any) => [...prevQuestions, newQuestions]);
-
     const response = await fetch(`http://localhost:5005/admin/quiz/${param.quizId}`, {
       method: 'PUT',
       headers: {
@@ -222,6 +227,7 @@ const QuestionForm: React.FC = () => {
       return;
     }
     createQuestion();
+    navigate(`/editGame/${param.quizId}`);
   }
 
   function handleImageChange (event: React.ChangeEvent<HTMLInputElement>) {
@@ -274,7 +280,7 @@ const QuestionForm: React.FC = () => {
                 variant="outlined"
                 id="outlined-required"
                 className={classes.element}
-                label="Time Limit"
+                label="Time Limit/ min"
                 value={timeLimit}
                 type="number"
                 InputProps={{ inputProps: { min: 0 } }}
@@ -334,6 +340,6 @@ const QuestionForm: React.FC = () => {
       </div>
     </>
   );
-};
+}
 
 export default QuestionForm;

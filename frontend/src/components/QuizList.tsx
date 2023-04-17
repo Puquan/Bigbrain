@@ -17,6 +17,7 @@ import { Typography } from '@mui/material';
 import Alert from './Alert';
 import SessionPopUp from './SessionPopUp';
 import PauseIcon from '@mui/icons-material/Pause';
+import { Quiz } from '@mui/icons-material';
 
 interface data {
   id: number;
@@ -67,7 +68,6 @@ function QuizList ({ items, heading }: Props) {
   const [quizzes, setQuizzes] = React.useState<any[]>([...items]);
   const navigate = useNavigate();
   const [questions, setQuestions] = React.useState<any[]>([]);
-  const [expanded, setExpanded] = React.useState(false);
   const [timeCostSum, setTimeCostSum] = React.useState<any[]>([]);
   const [questionNumber, setQuestionNumber] = React.useState<any[]>([]);
   const [alertVisible, setAlertVisible] = React.useState(false);
@@ -77,13 +77,10 @@ function QuizList ({ items, heading }: Props) {
   const [playQuizId, setPlayQuizId] = React.useState<string>('');
   const [sessionId, setSessionId] = React.useState<string>('');
   const [open, setOpen] = React.useState(false);
+  const [isStart, setIsStart] = React.useState(false);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
 
   React.useEffect(() => {
     setQuizzes([...items]);
@@ -148,14 +145,20 @@ function QuizList ({ items, heading }: Props) {
     setPlayQuizId(quizId.toString());
     startQuiz(quizId);
     fetchQuizSession(quizId);
+    setIsStart(true);
     setOpen(true);
-    setSessionPopUp(true);
   };
 
   const handlePauseClick = (quizId: number) => {
     console.log('pause ' + quizId)
     StopQuiz(quizId);
+    setOpen(true);
+    setIsStart(false);
   };
+
+  React.useEffect(() => {
+    setSessionPopUp(true);
+  }, [sessionId]);
 
   async function StopQuiz (quizId: number) {
     const response = await fetch(`http://localhost:5005/admin/quiz/${quizId}/end`, {
@@ -186,7 +189,6 @@ function QuizList ({ items, heading }: Props) {
       setAlertVisible(true);
       setErrorMessages(data.error);
     }
-    console.log(data);
   }
 
   async function deleteQuiz (quizId: number) {
@@ -202,14 +204,13 @@ function QuizList ({ items, heading }: Props) {
       setAlertVisible(true);
       setErrorMessages(data.error);
     }
-    console.log(data);
   }
 
   return (
     <>
     <div className='errorWindow'> {alertVisible && <Alert onClose={() => setAlertVisible(false)}>{errorMessages}</Alert>} </div>
     <Typography variant="h5" component="h5">{heading}</Typography>
-    {quizzes.length === 0 && <p>No Quiz found</p>}
+    {quizzes.length === 0 && <p>No Game found, you can create a game through above button</p>}
     <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '16px', justifyItems: 'center', alignItems: 'center', flexDirection: 'column' }}>
         {quizzes.map((quizzes, index) => (
       <Box key={index} sx={{ width: '100%', maxWidth: '400px', p: '1em' }}>
@@ -252,7 +253,7 @@ function QuizList ({ items, heading }: Props) {
         </CardActions>
         </Card>
         </Box>))}
-        {sessionPopUp && <SessionPopUp open={open} handleClose={handleClose} sessionId={sessionId} />}
+        {sessionPopUp && sessionId && <SessionPopUp open={open} handleClose={handleClose} sessionId={sessionId} isStart={isStart} quizId={playQuizId}/>}
     </Box>
     </>
   )

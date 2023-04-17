@@ -3,6 +3,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 import { Stack, Typography } from '@mui/material';
+import { green, purple } from '@mui/material/colors';
+import QuizResult from './QuizResult';
+import { useNavigate } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -20,6 +23,15 @@ const useStyles = makeStyles((theme) => ({
     left: '50%',
     transform: 'translate(-45%, -50%)',
     p: 4,
+    zIndex: 50,
+  },
+  button1: {
+    marginTop: '2em',
+    backgroundColor: purple[500],
+  },
+  button2: {
+    marginTop: '2em',
+    backgroundColor: green[500],
   },
 }));
 
@@ -27,29 +39,47 @@ interface Props {
   open: boolean;
   handleClose: () => void;
   sessionId: string;
+  isStart: boolean;
+  quizId: string;
 }
 
-function SessionPopUp ({ open, handleClose, sessionId }: Props) {
+function SessionPopUp ({ open, handleClose, sessionId, isStart, quizId }: Props) {
   const classes = useStyles();
+  const navigate = useNavigate();
 
   const handleCopy = () => {
     navigator.clipboard.writeText(sessionId);
   }
 
+  const handleViewResult = () => {
+    navigate(`/quizResult/${quizId}/${sessionId}`);
+  };
+
   return (
-    <div>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
-      >
-        <div className={classes.paper}>
-          <Typography variant="h5"> Session ID: {sessionId} </Typography>
-          <Button variant="contained" color="primary" size="medium" onClick={handleCopy}>Copy URL</Button>
-        </div >
-      </Modal>
-    </div>
+    <>
+      {sessionId
+        ? <div>
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="simple-modal-title"
+          aria-describedby="simple-modal-description"
+        >
+          {isStart
+            ? <div className={classes.paper}>
+                <Typography variant="h5"> Session ID: {sessionId} </Typography>
+                <Button className={classes.button1} variant="contained" color="primary" size="medium" onClick={handleCopy}>Copy URL</Button>
+                <Button className={classes.button2} variant="contained" color="primary" size="medium" onClick={handleViewResult}>Manage Game</Button>
+              </div >
+            : <div className={classes.paper}>
+                <Typography variant="h5"> See Result? </Typography>
+              <Button className={classes.button1} variant="contained" color="primary" size="medium" onClick={handleViewResult}>View Result</Button>
+              </div>
+          }
+        </Modal>
+      </div>
+        : <div>loading</div>}
+    </>
   )
 }
 
