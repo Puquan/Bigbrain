@@ -1,8 +1,7 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import Login from './components/Login';
 import React from 'react';
-import { BrowserRouter } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { BrowserRouter, useNavigate } from 'react-router-dom';
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
@@ -99,10 +98,9 @@ describe('Login component', () => {
   it('navigates to register page when register button is clicked', () => {
     const mockNavigate = jest.fn();
     useNavigate.mockReturnValue(mockNavigate);
-    render(<Login onSubmit={() => {}} />);
-    const registerButton = screen.getByText("Don‘t have accounts? Register here");
+    render(<Login onSubmit={onSubmitMock} />);
+    const registerButton = screen.getByText('Don‘t have accounts? Register here');
     fireEvent.click(registerButton);
     expect(mockNavigate).toHaveBeenCalledWith('/register');
   });
-
 });

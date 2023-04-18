@@ -67,7 +67,7 @@ function SessionPopUp ({ open, handleClose, sessionId, isStart, quizId }: Props)
           {isStart
             ? <div className={classes.paper}>
                 <Typography variant="h5"> Session ID: {sessionId} </Typography>
-                <Button className={classes.button1} variant="contained" color="primary" size="medium" onClick={handleCopy}>Copy URL</Button>
+                <Button className={classes.button1} variant="contained" color="primary" size="medium" onClick={handleCopy}>Copy Session ID</Button>
                 <Button className={classes.button2} variant="contained" color="primary" size="medium" onClick={handleViewResult}>Manage Game</Button>
               </div >
             : <div className={classes.paper}>
