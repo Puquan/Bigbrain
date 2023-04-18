@@ -2,9 +2,8 @@ import React from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
-import { Stack, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { green, purple } from '@mui/material/colors';
-import QuizResult from './QuizResult';
 import { useNavigate } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({

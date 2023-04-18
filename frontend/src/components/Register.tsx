@@ -60,7 +60,7 @@ function Register ({ onSubmit }: Props) {
             <button className="auth-button" type='submit'>Register</button>
           </form>
           <div className='errorWindow'> {alertVisible && <Alert onClose={() => setAlertVisible(false)}>{errorMessages}</Alert>} </div>
-          <button className="link-btn" onClick={() => navigate('/')}>Already have an account? Log In here!</button>
+          <button data-testid="register" className="link-btn" onClick={() => navigate('/')}>Already have an account? Log In here!</button>
         </div>
       </div>
     </>

@@ -1,6 +1,5 @@
 import React from 'react'
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import CardHeader from '@mui/material/CardHeader';
@@ -11,12 +10,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { makeStyles } from '@material-ui/core/styles';
 import { useNavigate, useParams } from 'react-router-dom';
 import Alert from './Alert';
-
-interface AnswerOption {
-  id: number;
-  value: string;
-  isCorrect: boolean;
-}
 
 interface Question {
   questionId: number;
@@ -62,7 +55,6 @@ function QuestionList ({ game, quizId }: Props) {
   const style = useStyles();
 
   async function DeleteQuestion () {
-    console.log(gameQuestions)
     const response = await fetch(`http://localhost:5005/admin/quiz/${quizId}`, {
       method: 'PUT',
       headers: {
@@ -93,6 +85,7 @@ function QuestionList ({ game, quizId }: Props) {
 
   const handleDeleteClick = (questionId: string | number) => {
     console.log(questionId);
+    console.log('delete');
     setGameQuestions(gameQuestions.filter((question) => question.questionId !== questionId));
   };
 
@@ -119,10 +112,10 @@ function QuestionList ({ game, quizId }: Props) {
             return (
               <div key={question.questionId}>
                 <Typography>{'Question' + (index + 1)}: {question.question}</Typography>
-                <IconButton title="Edit the Quiz" className={style.icon} onClick={() => handleEditClick(question.questionId)}>
+                <IconButton data-testid={`edit${question.questionId}`} title="Edit the Quiz" className={style.icon} onClick={() => handleEditClick(question.questionId)}>
                   <EditIcon />
                 </IconButton>
-                <IconButton title="Delete the Quiz" className={style.icon} onClick={() => handleDeleteClick(question.questionId)}>
+                <IconButton data-testid={`delete${question.questionId}`} title="Delete the Quiz" className={style.icon} onClick={() => handleDeleteClick(question.questionId)}>
                   <DeleteIcon />
                 </IconButton>
               </div>

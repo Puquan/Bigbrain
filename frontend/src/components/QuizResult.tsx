@@ -124,7 +124,7 @@ function QuizResult () {
       { show && quizStatus
         ? <Stack className={classes.root} spacing={2}>
             <ButtonGroup variant="contained" aria-label="outlined primary button group">
-              <Button color="success" onClick={() => handleNextClick(quizId)} >Next Question</Button>
+              <Button color="success" onClick={() => handleNextClick(quizId)} >NEXT Question</Button>
               <Button color="error" onClick={() => handlePauseClick(quizId)}>STOP GAME</Button>
             </ButtonGroup>
             { isAdvance

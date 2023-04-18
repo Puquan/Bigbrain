@@ -78,7 +78,7 @@ function QuizList ({ items, heading }: Props) {
   const [sessionId, setSessionId] = React.useState<string>('');
   const [open, setOpen] = React.useState(false);
   const [isStart, setIsStart] = React.useState(false);
-
+  console.log(sessionPopUp)
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -147,6 +147,7 @@ function QuizList ({ items, heading }: Props) {
     fetchQuizSession(quizId);
     setIsStart(true);
     setOpen(true);
+    setSessionPopUp(true);
   };
 
   const handlePauseClick = (quizId: number) => {
@@ -155,10 +156,6 @@ function QuizList ({ items, heading }: Props) {
     setOpen(true);
     setIsStart(false);
   };
-
-  React.useEffect(() => {
-    setSessionPopUp(true);
-  }, [sessionId]);
 
   async function StopQuiz (quizId: number) {
     const response = await fetch(`http://localhost:5005/admin/quiz/${quizId}/end`, {
