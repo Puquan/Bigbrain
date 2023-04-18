@@ -131,7 +131,7 @@ function QuizResult () {
               ? <Card>
               <CardHeader
                 title={CurrentQuestion.question}
-                subheader={'TimeLimit: ' + CurrentQuestion.timeLimit + 'min'}/>
+                subheader={'TimeLimit: ' + CurrentQuestion.timeLimit + 's'}/>
               </Card>
               : <Typography>Please Click Next Question to Start</Typography>}
           </Stack>

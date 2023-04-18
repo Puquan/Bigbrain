@@ -106,13 +106,13 @@ function QuestionFormEdit () {
     const updateCopy = [...QuestionfromDB];
     const updateQuestion = {
       questionId: Number(questionId),
-      questionType: questionType,
-      question: question,
-      timeLimit: timeLimit,
-      points: points,
-      url: url,
-      answerOptions: answerOptions,
-      image: image,
+      questionType,
+      question,
+      timeLimit,
+      points,
+      url,
+      answerOptions,
+      image,
     }
     updateCopy[index] = updateQuestion;
     const response = await fetch(`http://localhost:5005/admin/quiz/${param.quizId}`, {
@@ -278,7 +278,7 @@ function QuestionFormEdit () {
                 variant="outlined"
                 id="outlined-required"
                 className={classes.element}
-                label="Time Limit/ min"
+                label="Time Limit/ second"
                 value={timeLimit}
                 type="number"
                 InputProps={{ inputProps: { min: 0 } }}

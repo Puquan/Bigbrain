@@ -17,7 +17,7 @@ import { Typography } from '@mui/material';
 import Alert from './Alert';
 import SessionPopUp from './SessionPopUp';
 import PauseIcon from '@mui/icons-material/Pause';
-import { Quiz } from '@mui/icons-material';
+import Tooltip from '@mui/material/Tooltip';
 
 interface data {
   id: number;
@@ -217,9 +217,11 @@ function QuizList ({ items, heading }: Props) {
         <Card key={index} className={style.card}>
         <CardHeader
             action={
-              <IconButton aria-label="settings">
-                  <AddIcon/>
-              </IconButton>
+              <Tooltip title="Add" arrow>
+                <IconButton aria-label="settings">
+                    <AddIcon/>
+                </IconButton>
+              </Tooltip>
             }
             title={quizzes.name}
             subheader={'Total questions: ' + questionNumber[index]}
@@ -234,22 +236,32 @@ function QuizList ({ items, heading }: Props) {
           display: 'flex',
           justifyContent: 'left',
         }}>
-              <AccessTimeFilledIcon />
-              <p>{timeCostSum[index]}</p>
+        <Tooltip title="Total Game Time" arrow>
+            <AccessTimeFilledIcon />
+        </Tooltip>
+        <p>{timeCostSum[index]}</p>
         </CardContent>
         <CardActions>
-            <IconButton title="Edit the Quiz" className={style.icon} onClick={() => handleEditClick(quizzes.id)}>
-              <EditIcon />
-            </IconButton>
-            <IconButton title="Delete the Quiz" className={style.icon} onClick={() => handleDeleteClick(quizzes.id)}>
-              <DeleteIcon />
-            </IconButton>
-            <IconButton title="Start the Quiz" className={style.icon} onClick={() => handlePlayClick(quizzes.id)} >
-              <PlayArrowIcon />
-            </IconButton>
-            <IconButton title="Stop the Quiz" className={style.icon} onClick={() => handlePauseClick(quizzes.id)} >
-              <PauseIcon />
-            </IconButton>
+            <Tooltip title="Edit the Game" arrow>
+              <IconButton className={style.icon} onClick={() => handleEditClick(quizzes.id)}>
+                <EditIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Delete the Game" arrow>
+              <IconButton className={style.icon} onClick={() => handleDeleteClick(quizzes.id)}>
+                <DeleteIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Start the Game" arrow>
+              <IconButton className={style.icon} onClick={() => handlePlayClick(quizzes.id)} >
+                <PlayArrowIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Stop the Game" arrow>
+              <IconButton className={style.icon} onClick={() => handlePauseClick(quizzes.id)} >
+                <PauseIcon />
+              </IconButton>
+            </Tooltip>
         </CardActions>
         </Card>
         </Box>))}

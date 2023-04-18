@@ -12,12 +12,6 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 
-interface AnswerOption {
-  id: number;
-  value: string;
-  isCorrect: boolean;
-}
-
 interface Question {
   questionId: number;
   questionType: string;
@@ -56,11 +50,20 @@ function EditGame () {
   const [alertVisible, setAlertVisible] = React.useState(false);
   const [editQuiz, setEditQuiz] = React.useState(false);
   const [showQuestionList, setShowQuestionList] = React.useState(false);
+  const [dataHook, setdataHook] = React.useState<null>(null);
 
   React.useEffect(() => {
     setId(param.id);
-    fetchQuizbyId(id);
-  }, [showQuestionList]);
+    fetchQuizbyId(id)
+  }, []);
+
+  console.log(showQuestionList)
+
+  React.useEffect(() => {
+    if (dataHook) {
+      setShowQuestionList(true);
+    }
+  }, [dataHook]);
 
   async function fetchQuizbyId (id: string | number) {
     const response = await fetch(`http://localhost:5005/admin/quiz/${id}`, {
@@ -78,7 +81,7 @@ function EditGame () {
     }
     setQuiz(data);
     setFirst(false);
-    setShowQuestionList(true);
+    setdataHook(data);
   }
 
   const handleDeleteClick = (quizId: undefined | string) => {

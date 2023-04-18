@@ -11,7 +11,7 @@ import Checkbox from '@mui/material/Checkbox';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { Button, FormControlLabel, IconButton, Radio, RadioGroup } from '@mui/material';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Alert from './Alert';
 import { PhotoCamera } from '@mui/icons-material';
 
@@ -280,7 +280,7 @@ function QuestionForm () {
                 variant="outlined"
                 id="outlined-required"
                 className={classes.element}
-                label="Time Limit/ min"
+                label="Time Limit/ second"
                 value={timeLimit}
                 type="number"
                 InputProps={{ inputProps: { min: 0 } }}

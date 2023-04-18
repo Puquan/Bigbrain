@@ -3,18 +3,17 @@ import Login from './components/Login'
 import Register from './components/Register';
 import DashBoard from './components/DashBoard';
 import './App.css';
-import 'bootstrap/dist/css/bootstrap.css';
 import QuizResult from './components/QuizResult';
 import QuestionFormEdit from './components/QuestionFormEdit';
 import {
   useNavigate,
   Routes,
   Route,
-  Link,
-  useParams
 } from 'react-router-dom';
 import EditGame from './components/EditGame';
 import QuestionForm from './components/QuestionForm';
+import PlayerJoin from './components/PlayerJoin';
+import PlayerSession from './components/PlayerSession';
 
 function App () {
   const [token, setToken] = React.useState<null | string>(null);
@@ -48,6 +47,8 @@ function App () {
       <Route path='/questionForm/:quizId/:questionId/create' element={<QuestionForm />} />
       <Route path='/quizResult/:quizId/:sessionId' element={<QuizResult />} />
       <Route path='/questionForm/:quizId/:questionId/edit' element={<QuestionFormEdit />} />
+      <Route path="/playerjoin" element={<PlayerJoin />} />
+      <Route path="/playerjoin/:playerId/:sessionid" element={<PlayerSession />} />
     </Routes>
     </>
   );
