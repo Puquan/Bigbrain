@@ -33,10 +33,6 @@ function App () {
     }
   }, [token]);
 
-  const onSaveGame = () => {
-    navigate('/dashboard');
-  }
-
   return (
     <>
     <Routes>

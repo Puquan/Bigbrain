@@ -1,7 +1,7 @@
 import React from 'react'
 import Confetti from 'react-confetti';
 import { useParams } from 'react-router-dom';
-import { Button, Card, CardActions, CardContent, CardHeader, CardMedia, Checkbox, FormControl, FormControlLabel, FormGroup, Stack, TextField, Typography } from '@mui/material';
+import { Button, Card, CardActions, CardContent, CardHeader, CardMedia, Checkbox, FormControl, FormControlLabel, FormGroup, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import Alert from './Alert';
 
@@ -40,7 +40,7 @@ function PlayerSession () {
       },
     })
     const data = await response.json();
-
+    console.log(sessionId);
     if (response.status === 200 && data.started) {
       setQuizState('quiz');
     }

@@ -67,7 +67,6 @@ const useStyles = makeStyles({
 function QuizList ({ items, heading }: Props) {
   const [quizzes, setQuizzes] = React.useState<any[]>([...items]);
   const navigate = useNavigate();
-  const [questions, setQuestions] = React.useState<any[]>([]);
   const [timeCostSum, setTimeCostSum] = React.useState<any[]>([]);
   const [questionNumber, setQuestionNumber] = React.useState<any[]>([]);
   const [alertVisible, setAlertVisible] = React.useState(false);
@@ -78,7 +77,6 @@ function QuizList ({ items, heading }: Props) {
   const [sessionId, setSessionId] = React.useState<string>('');
   const [open, setOpen] = React.useState(false);
   const [isStart, setIsStart] = React.useState(false);
-  console.log(sessionPopUp)
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 

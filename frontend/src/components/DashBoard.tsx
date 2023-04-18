@@ -33,7 +33,6 @@ function DashBoard ({ token }: Props) {
   const [newGameShow, setNewGameShow] = React.useState(false);
   const [quizNameInput, setQuizNameInput] = React.useState('');
   const [session, setSession] = React.useState<any>([]);
-  const navigate = useNavigate();
 
   React.useEffect(() => {
     fetchAllQuizzes();

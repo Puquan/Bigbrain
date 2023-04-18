@@ -73,7 +73,7 @@ function QuestionForm () {
   const classes = useStyles();
   const param = useParams();
   const navigate = useNavigate();
-  const [questionId, setQuestionId] = React.useState<number>(Date.now());
+  const [questionId] = React.useState<number>(Date.now());
   const [questionType, setQuestionType] = React.useState('single-choice');
   const [question, setQuestion] = React.useState('');
   const [timeLimit, setTimeLimit] = React.useState<string>('');

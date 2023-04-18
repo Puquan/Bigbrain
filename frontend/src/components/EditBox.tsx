@@ -3,7 +3,6 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import React from 'react'
-import { on } from 'events';
 
 interface Props {
   quizId: string;
@@ -14,7 +13,6 @@ function EditBox ({ quizId, onSubmit }: Props) {
   const [quizName, setQuizName] = React.useState('');
   const [thumbnail, setThumbnail] = React.useState('');
   const [thumbnailName, setThumbnailName] = React.useState('');
-  const [save, setSave] = React.useState(false);
 
   async function updateQuiz () {
     const response = await fetch(`http://localhost:5005/admin/quiz/${quizId}`, {
@@ -30,6 +28,7 @@ function EditBox ({ quizId, onSubmit }: Props) {
       }),
     })
     const data = await response.json();
+    console.log(data);
   }
 
   function handleImageChange (event: React.ChangeEvent<HTMLInputElement>) {

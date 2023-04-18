@@ -51,7 +51,6 @@ function QuestionList ({ game, quizId }: Props) {
   const [gameQuestions, setGameQuestions] = React.useState(game.questions);
   const [alertVisible, setAlertVisible] = React.useState(false);
   const navigate = useNavigate();
-  const param = useParams();
   const style = useStyles();
 
   async function DeleteQuestion () {
