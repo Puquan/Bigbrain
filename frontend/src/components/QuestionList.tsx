@@ -95,6 +95,8 @@ function QuestionList ({ game, quizId }: Props) {
   React.useEffect(() => {
     if (gameQuestions) {
       DeleteQuestion();
+    } else {
+      setGameQuestions(game.questions);
     }
   }, [gameQuestions]);
 
@@ -107,8 +109,8 @@ function QuestionList ({ game, quizId }: Props) {
         <CardContent>
           <CardMedia
             component="img"
-            alt='Do not have a Thumbnail yet!'
-            height="140"
+            alt='The Game does not have a Thumbnail yet! Add one now by clicking on the "Edit" button!'
+            height="auto"
             image={gameThumbnail}
           />
           {gameQuestions && gameQuestions.map((question: any, index) => {
