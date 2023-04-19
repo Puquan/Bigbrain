@@ -78,7 +78,7 @@ function SessionPopUp ({ open, handleClose, sessionId, isStart, quizId }: Props)
           }
         </Modal>
       </div>
-        : <div>loading</div>}
+        : <div></div>}
     </>
   )
 }

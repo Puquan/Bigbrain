@@ -100,7 +100,6 @@ function QuizList ({ items, heading }: Props) {
         }
       })
       const data = await response.json();
-      console.log('data', data.questions);
       numberlist.push(data.questions.length);
       let sum = 0;
       if (data.questions.length > 0) {
@@ -123,7 +122,9 @@ function QuizList ({ items, heading }: Props) {
       }
     })
     const data = await response.json();
-    setSessionId(data.active);
+    if (isStart) {
+      setSessionId(data.active);
+    }
   }
 
   const handleEditClick = (quizid: number) => {
@@ -141,17 +142,31 @@ function QuizList ({ items, heading }: Props) {
     console.log('play ' + quizId)
     setPlayQuizId(quizId.toString());
     startQuiz(quizId);
-    fetchQuizSession(quizId);
-    setIsStart(true);
     setOpen(true);
-    setSessionPopUp(true);
   };
+
+  React.useEffect(() => {
+    if (isStart) {
+      fetchQuizSession(Number(playQuizId));
+    } else {
+      fetchQuizSession(Number(playQuizId));
+    }
+  }, [isStart]);
+
+  React.useEffect(() => {
+    if (sessionId !== '') {
+      setSessionPopUp(true);
+      console.log('is start', isStart)
+      console.log('session id', sessionId)
+      console.log('session pop up', sessionPopUp)
+    }
+  }, [sessionId]);
 
   const handlePauseClick = (quizId: number) => {
     console.log('pause ' + quizId)
     StopQuiz(quizId);
+    setPlayQuizId(quizId.toString());
     setOpen(true);
-    setIsStart(false);
   };
 
   async function StopQuiz (quizId: number) {
@@ -163,11 +178,12 @@ function QuizList ({ items, heading }: Props) {
       }
     })
     const data = await response.json();
+    setIsStart(false);
+    setPlayQuizId(quizId.toString());
     if (data.error) {
       setAlertVisible(true);
       setErrorMessages(data.error);
     }
-    console.log(data);
   }
 
   async function startQuiz (quizId: number) {
@@ -179,6 +195,8 @@ function QuizList ({ items, heading }: Props) {
       }
     })
     const data = await response.json();
+    setIsStart(true);
+    setPlayQuizId(quizId.toString());
     if (data.error) {
       setAlertVisible(true);
       setErrorMessages(data.error);
@@ -202,63 +220,63 @@ function QuizList ({ items, heading }: Props) {
 
   return (
     <>
-    <div className='errorWindow'> {alertVisible && <Alert onClose={() => setAlertVisible(false)}>{errorMessages}</Alert>} </div>
-    <div style={{ textAlign: 'center' }}>
-      <Typography variant="h5" component="h5">{heading}</Typography>
-    </div>
-    {quizzes.length === 0 && <p>No Game found, you can create a game through above button</p>}
-    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '16px', justifyItems: 'center', alignItems: 'center', flexDirection: 'column' }}>
+      <div className='errorWindow'> {alertVisible && <Alert onClose={() => setAlertVisible(false)}>{errorMessages}</Alert>} </div>
+      <div style={{ textAlign: 'center' }}>
+        <Typography variant="h5" component="h5">{heading}</Typography>
+      </div>
+      {quizzes.length === 0 && <p>No Game found, you can create a game through above button</p>}
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '16px', justifyItems: 'center', alignItems: 'center', flexDirection: 'column' }}>
         {quizzes.map((quizzes, index) => (
-      <Box key={index} sx={{ width: '100%', maxWidth: '400px', p: '1em' }}>
-        <Card key={index} className={style.card}>
-        <CardHeader
-            data-testid="display-quiz"
-            title={quizzes.name}
-            subheader={'Total questions: ' + questionNumber[index]}
-        />
-        <CardMedia
-          component="img"
-          alt='This quiz has no thumbnail, you can add one by clicking the edit button'
-          height="175"
-          image={quizzes.thumbnail}
-        />
-        <CardContent sx={{
-          display: 'flex',
-          justifyContent: 'left',
-        }}>
-        <div className="parent">
-          <Tooltip title="Total Game Time" arrow>
-              <AccessTimeFilledIcon />
-          </Tooltip>
-          <p>{timeCostSum[index]}</p>
-        </div>
-        </CardContent>
-        <CardActions>
-            <Tooltip title="Edit the Game" arrow>
-              <IconButton className={style.icon} onClick={() => handleEditClick(quizzes.id)}>
-                <EditIcon />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Delete the Game" arrow>
-              <IconButton className={style.icon} onClick={() => handleDeleteClick(quizzes.id)}>
-                <DeleteIcon />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Start the Game" arrow>
-              <IconButton className={style.icon} onClick={() => handlePlayClick(quizzes.id)} >
-                  <PlayArrowIcon data-testid="startquiz" />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Stop the Game" arrow>
-              <IconButton className={style.icon} onClick={() => handlePauseClick(quizzes.id)} data-testid="stopquiz">
-                <PauseIcon />
-              </IconButton>
-            </Tooltip>
-        </CardActions>
-        </Card>
-        </Box>))}
-        {sessionPopUp && sessionId && <SessionPopUp open={open} handleClose={handleClose} sessionId={sessionId} isStart={isStart} quizId={playQuizId}/>}
-    </Box>
+          <Box key={index} sx={{ width: '100%', maxWidth: '400px', p: '1em' }}>
+            <Card key={index} className={style.card}>
+              <CardHeader
+                data-testid="display-quiz"
+                title={quizzes.name}
+                subheader={'Total questions: ' + questionNumber[index]}
+              />
+              <CardMedia
+                component="img"
+                alt='This quiz has no thumbnail, you can add one by clicking the edit button'
+                height="175"
+                image={quizzes.thumbnail}
+              />
+              <CardContent sx={{
+                display: 'flex',
+                justifyContent: 'left',
+              }}>
+                <div className="parent">
+                  <Tooltip title="Total Game Time" arrow>
+                    <AccessTimeFilledIcon />
+                  </Tooltip>
+                  <p>{timeCostSum[index]}</p>
+                </div>
+              </CardContent>
+              <CardActions>
+                <Tooltip title="Edit the Game" arrow>
+                  <IconButton className={style.icon} onClick={() => handleEditClick(quizzes.id)}>
+                    <EditIcon />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Delete the Game" arrow>
+                  <IconButton className={style.icon} onClick={() => handleDeleteClick(quizzes.id)}>
+                    <DeleteIcon />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Start the Game" arrow>
+                  <IconButton className={style.icon} onClick={() => handlePlayClick(quizzes.id)} >
+                    <PlayArrowIcon data-testid="startquiz" />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Stop the Game" arrow>
+                  <IconButton className={style.icon} onClick={() => handlePauseClick(quizzes.id)} data-testid="stopquiz">
+                    <PauseIcon />
+                  </IconButton>
+                </Tooltip>
+              </CardActions>
+            </Card>
+          </Box>))}
+        {sessionPopUp && <SessionPopUp open={open} handleClose={handleClose} sessionId={sessionId} isStart={isStart} quizId={playQuizId} />}
+      </Box>
     </>
   )
 }
