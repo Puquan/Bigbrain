@@ -21,7 +21,7 @@ function Navbar () {
         </a>
       <ul>
         <li>
-            <a onClick={handleLogout}>Logout</a>
+            <a data-testid="logout" onClick={handleLogout}>Logout</a>
         </li>
       </ul>
         </nav>

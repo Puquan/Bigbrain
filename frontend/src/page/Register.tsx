@@ -50,7 +50,7 @@ function Register ({ onSubmit }: Props) {
     <>
       <div className='auth-page'>
         <div className='auth-div'>
-          <form className="register-form" onSubmit={handleSubmit}>
+          <form className="register-form" onSubmit={handleSubmit} data-testid="register-form">
             <label htmlFor='username'>Username: </label>
             <input value={username} onChange={(e) => setUsername(e.target.value)} type='text' name='username' id='username' />
             <label htmlFor='email'>Email: </label>

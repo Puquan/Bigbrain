@@ -212,6 +212,7 @@ function QuizList ({ items, heading }: Props) {
       <Box key={index} sx={{ width: '100%', maxWidth: '400px', p: '1em' }}>
         <Card key={index} className={style.card}>
         <CardHeader
+            data-testid="display-quiz"
             title={quizzes.name}
             subheader={'Total questions: ' + questionNumber[index]}
         />
@@ -245,11 +246,11 @@ function QuizList ({ items, heading }: Props) {
             </Tooltip>
             <Tooltip title="Start the Game" arrow>
               <IconButton className={style.icon} onClick={() => handlePlayClick(quizzes.id)} >
-                <PlayArrowIcon />
+                  <PlayArrowIcon data-testid="startquiz" />
               </IconButton>
             </Tooltip>
             <Tooltip title="Stop the Game" arrow>
-              <IconButton className={style.icon} onClick={() => handlePauseClick(quizzes.id)} >
+              <IconButton className={style.icon} onClick={() => handlePauseClick(quizzes.id)} data-testid="stopquiz">
                 <PauseIcon />
               </IconButton>
             </Tooltip>

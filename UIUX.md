@@ -1,0 +1,1 @@
+Using huge amount of MUI components, change many buttons to mui icon buttons, and add tooltips to them. The tooltips are avaiable once the admin users hover on the icon buttons. Using <Card > <Stack> <TextField> and so on to decorate the page. The page is more user-friendly and easy to use.

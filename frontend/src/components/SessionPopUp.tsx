@@ -63,6 +63,7 @@ function SessionPopUp ({ open, handleClose, sessionId, isStart, quizId }: Props)
           onClose={handleClose}
           aria-labelledby="simple-modal-title"
           aria-describedby="simple-modal-description"
+          data-testid="popup"
         >
           {isStart
             ? <div className={classes.paper}>
@@ -72,7 +73,7 @@ function SessionPopUp ({ open, handleClose, sessionId, isStart, quizId }: Props)
               </div >
             : <div className={classes.paper}>
                 <Typography variant="h5"> See Result? </Typography>
-              <Button className={classes.button1} variant="contained" color="primary" size="medium" onClick={handleViewResult}>View Result</Button>
+                <Button data-testid="viewresult" className={classes.button1} variant="contained" color="primary" size="medium" onClick={handleViewResult}>View Result</Button>
               </div>
           }
         </Modal>

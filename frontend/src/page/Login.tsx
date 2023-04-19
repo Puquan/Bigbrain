@@ -49,15 +49,15 @@ function Login ({ onSubmit }: Props) {
     <>
       <div className='auth-page'>
         <div className='auth-div'>
-          <form className="login-form" onSubmit={handleSubmit}>
+          <form className="login-form" onSubmit={handleSubmit} data-testid="login-form" >
             <label htmlFor='email'>Email: </label>
-            <input value={email} onChange={(e) => setEmail(e.target.value)} type='email' name='email' id='email' />
+            <input value={email} onChange={(e) => setEmail(e.target.value)} type='email' name='email' id='email' data-testid="email-input" />
             <label htmlFor='password'>Password: </label>
             <input type='password' value={password} onChange={(e) => setPassword(e.target.value)} name='password' id='password' />
             <button className="auth-button" type='submit'>Login</button>
           </form>
           <div className='errorWindow'> {alertVisible && <Alert onClose={() => setAlertVisible(false)}>{errorMessages}</Alert>} </div>
-          <button className="link-btn" onClick={() => navigate('/register')}>Don&lsquo;t have accounts? Register here</button>
+          <button data-testid="register-link" className="link-btn" onClick={() => navigate('/register')}>Don&lsquo;t have accounts? Register here</button>
         </div>
       </div>
     </>

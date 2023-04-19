@@ -106,14 +106,15 @@ function DashBoard ({ token }: Props) {
         <div style={{ textAlign: 'center' }}>
         <Button variant="contained" data-testid="create-new-quiz" onClick={handleCreateGameClick}>Create A New Game</Button>
         </div>
-        { createWindowVisible && <div className="createWindow">
+        {createWindowVisible && <div className="createWindow" >
           <TextField
+            data-testid="quiz-name"
             helperText="Please enter the game name"
             id="demo-helper-text-aligned"
             label="Game"
             onChange={handleTextFieldChange}>
           </TextField>
-          <Button onClick={handleSendClick} variant="contained" endIcon={<SendIcon />} id='send-quizName'>
+          <Button onClick={handleSendClick} variant="contained" endIcon={<SendIcon />} data-testid='send-quizName'>
             Send
           </Button>
         </div>
