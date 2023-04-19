@@ -114,16 +114,18 @@ function QuizList ({ items, heading }: Props) {
   }
 
   async function fetchQuizSession (quizId: number) {
-    const response = await fetch(`http://localhost:5005/admin/quiz/${quizId}`, {
-      method: 'GET',
-      headers: {
-        'Content-type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
+    if (quizId !== 0) {
+      const response = await fetch(`http://localhost:5005/admin/quiz/${quizId}`, {
+        method: 'GET',
+        headers: {
+          'Content-type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        }
+      })
+      const data = await response.json();
+      if (isStart) {
+        setSessionId(data.active);
       }
-    })
-    const data = await response.json();
-    if (isStart) {
-      setSessionId(data.active);
     }
   }
 
