@@ -30,6 +30,7 @@ function PlayerSession () {
   const [selectedAnswerIds, setSelectedAnswerIds] = React.useState<number[]>([]);
   const [questionAnswers, setQuestionAnswers] = React.useState<any>([])
   const [playerResults, setPlayerResults] = React.useState<any>([]);
+  const [startTime, setStartTime] = React.useState<number>(0);
 
   async function startedQuiz () {
     const response = await fetch(`http://localhost:5005/play/${playerId}/status`, {
@@ -43,6 +44,10 @@ function PlayerSession () {
     console.log(sessionId);
     if (response.status === 200 && data.started) {
       setQuizState('quiz');
+    }
+    if (data.error) {
+      setAlertVisible(true);
+      setErrorMessages(['The Game may be over or you may have entered the wrong session ID']);
     }
   }
 
@@ -58,13 +63,27 @@ function PlayerSession () {
 
     if (response.status === 200) {
       if (data.question.questionId !== currentQuestion.questionId) {
-        setTimer(Number(data.question.timeLimit));
+        console.log(data);
+        const startTimeString = data.question.isoTimeLastQuestionStarted;
+        console.log(startTimeString);
+        const startTime = new Date(startTimeString);
+        setStartTime(startTime.getTime());
+        const endTime = new Date(startTime.getTime() + Number(data.question.timeLimit) * 1000);
+        const diff = Math.floor((endTime.getTime() - new Date().getTime()) / 1000) + 1;
+        setTimer(Number(diff));
       }
       setCurrentQuestion(data.question);
     } else {
       setQuizState('complete')
     }
   }
+
+  React.useEffect(() => {
+    // if start time changed means that a new question started
+    if (startTime !== 0 && quizState === 'answer') {
+      setQuizState('quiz');
+    }
+  }, [startTime])
 
   async function submitAnswer () {
     const response = await fetch(`http://localhost:5005/play/${playerId}/answer`, {
@@ -115,12 +134,6 @@ function PlayerSession () {
     }
   }
 
-  console.log(playerResults)
-
-  const handleTestclick = () => {
-    startedQuiz();
-  }
-
   React.useEffect(() => {
     if (quizState === 'quiz') {
       getQuizCurrentQuestion()
@@ -138,7 +151,6 @@ function PlayerSession () {
 
   React.useEffect(() => {
     if (quizState === 'answer') {
-      // reset highlighted answers for next question
       setSelectedAnswerIds([]);
       getAnswer();
     }
@@ -155,7 +167,6 @@ function PlayerSession () {
 
   React.useEffect(() => {
     if (quizState === 'quiz') {
-      console.log(timer);
       if (timer > 0) {
         setTimeout(() => {
           setTimer(timer - 1);
@@ -202,23 +213,24 @@ function PlayerSession () {
             <Typography variant="h3">Welcome!</Typography>
             <Typography variant="h5">Please wait for the host to start the game.</Typography>
             <Confetti />
-            <button onClick={handleTestclick}>Test</button>
         </CenterContainer>
     }
-    {(quizState === 'quiz' && currentQuestion.length !== 0)
+    {(quizState === 'quiz' && currentQuestion.length !== 0 && timer > 0)
       ? <CenterContainer>
           <Card>
             <CardHeader
               title={`Question: ${currentQuestion.question}`}
               subheader={currentQuestion.questionType}
             />
-            <p>Timer [Seconds]: {timer}</p>
+            <p>Time Left: {timer}</p>
             <CardMedia
               component="img"
               height="200"
               image={currentQuestion.image}
               alt="Question Image"
             />
+            {/* url only allows Embed video, e.g https://www.youtube.com/embed/DEqiMEvJvV4 */}
+            {currentQuestion.image === '' ? <div></div> : <iframe width="360" height="315" src={currentQuestion.url} allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"></iframe>}
             <CardActions>
               <FormControl component="fieldset">
                 <FormGroup>

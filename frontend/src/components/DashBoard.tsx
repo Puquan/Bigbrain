@@ -5,9 +5,7 @@ import Button from '@mui/material/Button';
 import { TextField } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import Alert from './Alert';
-import {
-  useNavigate,
-} from 'react-router-dom';
+import { styled } from '@mui/material/styles';
 
 interface Props {
     token: null | string;
@@ -24,6 +22,14 @@ interface data {
   questions: any[];
 }
 
+const CenterContainer = styled('div')({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+  minHeight: '100vh',
+});
+
 function DashBoard ({ token }: Props) {
   const [quizzes, setQuizzes] = React.useState<data[]>([]);
   const [first, setFirst] = React.useState(true);
@@ -32,7 +38,6 @@ function DashBoard ({ token }: Props) {
   const [createWindowVisible, setCreateWindowVisible] = React.useState(false);
   const [newGameShow, setNewGameShow] = React.useState(false);
   const [quizNameInput, setQuizNameInput] = React.useState('');
-  const [session, setSession] = React.useState<any>([]);
 
   React.useEffect(() => {
     fetchAllQuizzes();
@@ -48,7 +53,6 @@ function DashBoard ({ token }: Props) {
     })
     const data = await response.json();
     setQuizzes(data.quizzes);
-    setSession(data);
     setFirst(false);
   }
 
@@ -71,10 +75,6 @@ function DashBoard ({ token }: Props) {
     }
     fetchAllQuizzes();
     setNewGameShow(true);
-  }
-
-  const handleTestclick = () => {
-    console.log(session);
   }
 
   const handleTextFieldChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -103,7 +103,9 @@ function DashBoard ({ token }: Props) {
     <div className='errorWindow'> {alertVisible && <Alert onClose={() => setAlertVisible(false)}>{errorMessages}</Alert>} </div>
     <Navbar/>
       <div className='dashboard'>
+        <div style={{ textAlign: 'center' }}>
         <Button variant="contained" data-testid="create-new-quiz" onClick={handleCreateGameClick}>Create A New Game</Button>
+        </div>
         { createWindowVisible && <div className="createWindow">
           <TextField
             helperText="Please enter the game name"
@@ -117,7 +119,6 @@ function DashBoard ({ token }: Props) {
         </div>
         }
       </div>
-      <button className='test' onClick={handleTestclick}> Test </button>
     {!first && <QuizList items={quizzes} heading='Your Game List'/>}
     </>
   );

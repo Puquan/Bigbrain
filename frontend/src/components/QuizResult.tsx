@@ -105,6 +105,7 @@ function QuizResult () {
       setAlertVisible(true);
       setErrorMessages(data.error);
     }
+    setQuizStatus(false);
     console.log('stop quiz');
   }
 
@@ -135,7 +136,7 @@ function QuizResult () {
               </Card>
               : <Typography>Please Click Next Question to Start</Typography>}
           </Stack>
-        : <h1>Quiz is not active</h1> }
+        : <h1>This part no done 2.3.3, show result</h1> }
     </>
   )
 }

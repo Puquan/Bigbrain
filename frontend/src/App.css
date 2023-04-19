@@ -156,3 +156,8 @@ input {
     justify-content: center;
     align-items: baseline;
 }
+
+.parent {
+    display: flex;
+    align-items: center;
+}

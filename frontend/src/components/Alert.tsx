@@ -1,17 +1,23 @@
 import React from 'react'
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
+import Button from '@mui/material/Button';
 
 interface AlertProps {
   children: React.ReactNode;
   onClose?: () => void;
 }
 
-const Alert = ({ children, onClose }: AlertProps) => {
+const Alerts = ({ children, onClose }: AlertProps) => {
   return (
-    <div className='alert alert-danger alert-dismissible fade show' data-testid="alert" >
+    <>
+    <Alert severity="error" data-testid="alert">
+      <AlertTitle>Error</AlertTitle>
       {children}
-      <button type="button" className="btn-close" onClick={onClose} data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
+    </Alert>
+    <Button onClick={onClose} data-bs-dismiss="alert" aria-label="Close">Close</Button>
+    </>
   )
 }
 
-export default Alert
+export default Alerts

@@ -6,6 +6,7 @@ import './App.css';
 import QuizResult from './components/QuizResult';
 import QuestionFormEdit from './components/QuestionFormEdit';
 import {
+  Navigate,
   useNavigate,
   Routes,
   Route,

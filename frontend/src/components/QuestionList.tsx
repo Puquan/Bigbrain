@@ -42,6 +42,10 @@ const useStyles = makeStyles({
       backgroundColor: 'transparent',
     },
   },
+  card: {
+    boxShadow: '0px 3px 6px rgba(0, 0, 0, 0.16)',
+    background: 'linear-gradient(135deg, #E3E8EF 60%, #FFD8CB 100%)',
+  },
 });
 
 function QuestionList ({ game, quizId }: Props) {
@@ -97,14 +101,14 @@ function QuestionList ({ game, quizId }: Props) {
   return (
     <>
       <div className='errorWindow'> {alertVisible && <Alert onClose={() => setAlertVisible(false)}>{ErrorMessages}</Alert>} </div>
-      <Card>
+      <Card className={style.card}>
         <CardHeader
           title= {gameName} />
         <CardContent>
           <CardMedia
             component="img"
             alt='Do not have a Thumbnail yet!'
-            height="50"
+            height="140"
             image={gameThumbnail}
           />
           {gameQuestions && gameQuestions.map((question: any, index) => {

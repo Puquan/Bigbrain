@@ -57,8 +57,6 @@ function EditGame () {
     fetchQuizbyId(id)
   }, []);
 
-  console.log(showQuestionList)
-
   React.useEffect(() => {
     if (dataHook) {
       setShowQuestionList(true);

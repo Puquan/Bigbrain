@@ -9,7 +9,6 @@ import CardMedia from '@mui/material/CardMedia';
 import CardHeader from '@mui/material/CardHeader';
 import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
-import AddIcon from '@mui/icons-material/Add';
 import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
 import { makeStyles } from '@material-ui/core/styles';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
@@ -204,37 +203,34 @@ function QuizList ({ items, heading }: Props) {
   return (
     <>
     <div className='errorWindow'> {alertVisible && <Alert onClose={() => setAlertVisible(false)}>{errorMessages}</Alert>} </div>
-    <Typography variant="h5" component="h5">{heading}</Typography>
+    <div style={{ textAlign: 'center' }}>
+      <Typography variant="h5" component="h5">{heading}</Typography>
+    </div>
     {quizzes.length === 0 && <p>No Game found, you can create a game through above button</p>}
     <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '16px', justifyItems: 'center', alignItems: 'center', flexDirection: 'column' }}>
         {quizzes.map((quizzes, index) => (
       <Box key={index} sx={{ width: '100%', maxWidth: '400px', p: '1em' }}>
         <Card key={index} className={style.card}>
         <CardHeader
-            action={
-              <Tooltip title="Add" arrow>
-                <IconButton aria-label="settings">
-                    <AddIcon/>
-                </IconButton>
-              </Tooltip>
-            }
             title={quizzes.name}
             subheader={'Total questions: ' + questionNumber[index]}
         />
         <CardMedia
           component="img"
           alt='This quiz has no thumbnail, you can add one by clicking the edit button'
-          height="50"
+          height="175"
           image={quizzes.thumbnail}
         />
         <CardContent sx={{
           display: 'flex',
           justifyContent: 'left',
         }}>
-        <Tooltip title="Total Game Time" arrow>
-            <AccessTimeFilledIcon />
-        </Tooltip>
-        <p>{timeCostSum[index]}</p>
+        <div className="parent">
+          <Tooltip title="Total Game Time" arrow>
+              <AccessTimeFilledIcon />
+          </Tooltip>
+          <p>{timeCostSum[index]}</p>
+        </div>
         </CardContent>
         <CardActions>
             <Tooltip title="Edit the Game" arrow>
