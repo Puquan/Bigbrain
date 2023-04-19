@@ -1,5 +1,5 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import Login from './components/Login';
+import Login from './page/Login';
 import React from 'react';
 import { BrowserRouter, useNavigate } from 'react-router-dom';
 

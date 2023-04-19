@@ -3,7 +3,7 @@ import Confetti from 'react-confetti';
 import { useParams } from 'react-router-dom';
 import { Button, Card, CardActions, CardContent, CardHeader, CardMedia, Checkbox, FormControl, FormControlLabel, FormGroup, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import Alert from './Alert';
+import Alert from '../components/Alert';
 
 const CenterContainer = styled('div')({
   display: 'flex',

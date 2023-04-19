@@ -1,10 +1,10 @@
 import React from 'react';
-import Navbar from './Navbar';
-import QuizList from './QuizList';
+import Navbar from '../components/Navbar';
+import QuizList from '../components/QuizList';
 import Button from '@mui/material/Button';
 import { TextField } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
-import Alert from './Alert';
+import Alert from '../components/Alert';
 import { styled } from '@mui/material/styles';
 
 interface Props {

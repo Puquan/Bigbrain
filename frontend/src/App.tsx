@@ -1,20 +1,20 @@
 import React from 'react';
-import Login from './components/Login'
-import Register from './components/Register';
-import DashBoard from './components/DashBoard';
+import Login from './page/Login'
+import Register from './page/Register';
+import DashBoard from './page/DashBoard';
 import './App.css';
 import QuizResult from './components/QuizResult';
-import QuestionFormEdit from './components/QuestionFormEdit';
+import QuestionFormEdit from './page/QuestionFormEdit';
 import {
   Navigate,
   useNavigate,
   Routes,
   Route,
 } from 'react-router-dom';
-import EditGame from './components/EditGame';
-import QuestionForm from './components/QuestionForm';
-import PlayerJoin from './components/PlayerJoin';
-import PlayerSession from './components/PlayerSession';
+import EditGame from './page/EditGame';
+import QuestionForm from './page/QuestionForm';
+import PlayerJoin from './page/PlayerJoin';
+import PlayerSession from './page/PlayerSession';
 
 function App () {
   const [token, setToken] = React.useState<null | string>(null);

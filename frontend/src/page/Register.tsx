@@ -1,5 +1,5 @@
 import React, { FormEvent } from 'react';
-import Alert from './Alert';
+import Alert from '../components/Alert';
 import { useNavigate } from 'react-router-dom';
 
 interface Props {

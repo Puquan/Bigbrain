@@ -3,7 +3,7 @@ import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom'
 import { Stack, TextField, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import Alert from './Alert';
+import Alert from '../components/Alert';
 
 const CenterContainer = styled('div')({
   display: 'flex',

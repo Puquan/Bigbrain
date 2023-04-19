@@ -2,12 +2,12 @@ import {
   Button,
   ButtonGroup,
 } from '@mui/material'
-import QuestionList from './QuestionList';
-import EditBox from './EditBox';
+import QuestionList from '../components/QuestionList';
+import EditBox from '../components/EditBox';
 import { useNavigate, useParams } from 'react-router-dom'
 import * as React from 'react';
-import Alert from './Alert';
-import Navbar from './Navbar';
+import Alert from '../components/Alert';
+import Navbar from '../components/Navbar';
 import DeleteIcon from '@mui/icons-material/Delete'
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
